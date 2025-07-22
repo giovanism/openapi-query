@@ -21,10 +21,10 @@ const ExtractionInput: React.FC<ExtractionInputProps> = ({
   };
 
   const quickExtracts = [
-    { label: 'Paths', value: 'paths' },
-    { label: 'Schemas', value: 'components.schemas' },
-    { label: 'Info', value: 'info' },
-    { label: 'Servers', value: 'servers' },
+    { label: 'Paths', value: '#/paths' },
+    { label: 'Schemas', value: '#/components/schemas' },
+    { label: 'Info', value: '#/info' },
+    { label: 'Servers', value: '#/servers' },
   ];
 
   return (
@@ -35,7 +35,7 @@ const ExtractionInput: React.FC<ExtractionInputProps> = ({
         <div className="ml-auto group relative">
           <HelpCircle className="w-4 h-4 text-gray-400 cursor-help" />
           <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded p-2 w-48 z-10">
-            Use dot notation to extract nested properties (e.g., "components.schemas.User")
+            Use JSON Pointer to extract nested properties (e.g., "#/components/schemas/User")
           </div>
         </div>
       </div>

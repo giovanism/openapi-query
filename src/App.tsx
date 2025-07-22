@@ -37,12 +37,12 @@ function App() {
         parsedContent = yaml.load(content);
       }
 
-      // Use swagger-parser to validate and resolve references
-      const api = await SwaggerParser.validate(parsedContent);
+      const api = await SwaggerParser.parse(parsedContent);
+      const $refs = await SwaggerParser.resolve(api);
       
       setDocument({
-        original: parsedContent,
-        parsed: api
+        original: api,
+        parsed: $refs
       });
       setSuccess('OpenAPI document loaded and validated successfully!');
     } catch (err) {
@@ -57,7 +57,24 @@ function App() {
     setError(null);
     setSuccess(null);
 
+
     try {
+      // TODO optimize json vs yaml download and resolve
+      if (url.endsWith('.json')) {
+        const api = await SwaggerParser.parse(url);
+        const $refs = await SwaggerParser.resolve(api, {
+          dereference: { circular: 'ignore' },
+          parse: { json: true }
+        });
+        setDocument({
+          original: api,
+          parsed: $refs
+        });
+        setSuccess('OpenAPI document loaded and validated successfully!');
+        setIsLoading(false);
+        return;
+      }
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
@@ -76,20 +93,13 @@ function App() {
 
     try {
       const query = extractionQuery.trim();
-      const parts = query.split('.');
-      let result = document.parsed;
 
-      for (const part of parts) {
-        if (result && typeof result === 'object' && part in result) {
-          result = result[part];
-        } else {
-          throw new Error(`Property '${part}' not found in document`);
-        }
-      }
+      console.log('$refs:', document.parsed);
 
-      setExtractedData(result);
+      setExtractedData(document.parsed.get(query));
       setError(null);
     } catch (err) {
+      console.error(err);
       setError(err instanceof Error ? err.message : 'Failed to extract data');
       setExtractedData(null);
     }
@@ -121,7 +131,7 @@ function App() {
             </div>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Load OpenAPI/Swagger specifications from code or URL, then extract specific parts 
-              like paths, schemas, or any nested property using dot notation.
+              like paths, schemas, or any nested property using JSON Pointer.
             </p>
           </div>
 
@@ -207,20 +217,20 @@ function App() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Version:</span>
-                      <span className="font-medium">{document.parsed.openapi || document.parsed.swagger || 'Unknown'}</span>
+                      <span className="font-medium">{document.original.openapi || document.original.swagger || 'Unknown'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Title:</span>
-                      <span className="font-medium">{document.parsed.info?.title || 'Untitled'}</span>
+                      <span className="font-medium">{document.original.info?.title || 'Untitled'}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Paths:</span>
-                      <span className="font-medium">{Object.keys(document.parsed.paths || {}).length}</span>
+                      <span className="font-medium">{Object.keys(document.original.paths || {}).length}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Schemas:</span>
                       <span className="font-medium">
-                        {Object.keys(document.parsed.components?.schemas || document.parsed.definitions || {}).length}
+                        {Object.keys(document.original.components?.schemas || document.original.definitions || {}).length}
                       </span>
                     </div>
                   </div>
