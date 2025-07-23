@@ -275,18 +275,17 @@ function App() {
               <div>
                 <h4 className="font-medium text-blue-800 mb-2">Common Extractions:</h4>
                 <ul className="space-y-1 text-blue-700">
-                  <li><code className="bg-blue-100 px-1 rounded">paths</code> - All API endpoints</li>
-                  <li><code className="bg-blue-100 px-1 rounded">components.schemas</code> - Data models</li>
-                  <li><code className="bg-blue-100 px-1 rounded">info</code> - API metadata</li>
-                  <li><code className="bg-blue-100 px-1 rounded">servers</code> - Server configurations</li>
+                  <li><code className="bg-blue-100 px-1 rounded">#/paths</code> - All API endpoints</li>
+                  <li><code className="bg-blue-100 px-1 rounded">#/components/schemas</code> - Data models</li>
+                  <li><code className="bg-blue-100 px-1 rounded">#/info</code> - API metadata</li>
+                  <li><code className="bg-blue-100 px-1 rounded">#/servers</code> - Server configurations</li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-medium text-blue-800 mb-2">Advanced Examples:</h4>
                 <ul className="space-y-1 text-blue-700">
-                  <li><code className="bg-blue-100 px-1 rounded">paths./users.get</code> - Specific endpoint</li>
-                  <li><code className="bg-blue-100 px-1 rounded">components.schemas.User</code> - User schema</li>
-                  <li><code className="bg-blue-100 px-1 rounded">paths./users.get.responses</code> - Response definitions</li>
+                  <li><code className="bg-blue-100 px-1 rounded">{'#/paths/~1api~1v1~1releases~1{release_id}'}</code> - Specific Path</li>
+                  <li><code className="bg-blue-100 px-1 rounded">{'#/paths/~1api~1v1~1releases~1{release_id}/put/requestBody/content/application~1json/schema'}</code> - Specific Operation Request Body JSON Schema</li>
                 </ul>
               </div>
             </div>
