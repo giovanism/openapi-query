@@ -21,6 +21,7 @@ const ExtractionInput: React.FC<ExtractionInputProps> = ({
   };
 
   const quickExtracts = [
+    { label: 'All', value: '#' },
     { label: 'Paths', value: '#/paths' },
     { label: 'Schemas', value: '#/components/schemas' },
     { label: 'Info', value: '#/info' },
@@ -48,7 +49,7 @@ const ExtractionInput: React.FC<ExtractionInputProps> = ({
             onChange={(e) => onChange(e.target.value)}
             onKeyPress={handleKeyPress}
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="e.g., paths, components.schemas, info"
+            placeholder="e.g., #, #/paths, #/components/schemas, #/info"
           />
           <button
             onClick={onExtract}
